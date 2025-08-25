@@ -1,8 +1,11 @@
 using UnityEngine;
 
-public class PlayerShoot : MonoBehaviour
+public class WeaponHolder : MonoBehaviour
 {
+    [SerializeField]
     private PlayerInput playerInput;
+
+    private Shooter shooter;
 
     private IWeapon weapon;
 
@@ -14,7 +17,7 @@ public class PlayerShoot : MonoBehaviour
 
     private void Awake()
     {
-        playerInput = GetComponent<PlayerInput>();
+        shooter = GetComponent<Shooter>();
         weapon = gunWeapon;
     }
 
@@ -37,12 +40,14 @@ public class PlayerShoot : MonoBehaviour
         if (shoot)
         {
             weapon.Shoot(ref shoot);
+            shooter.Shoot();
         }
     }
 
     private void StartShoot()
     {
         shoot = true;
+        shooter.ResetTimer();
     }
 
     private void StopShoot()
@@ -57,5 +62,12 @@ public class PlayerShoot : MonoBehaviour
             if (weapon == gunWeapon) weapon = rifleWeapon;
             else weapon = gunWeapon;
         }
+    }
+
+    public void GameOver()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        enabled = false;
     }
 }
